@@ -10,24 +10,32 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
         return false;
     }
 
-    int rows = matrix.size(), cols = matrix[0].size();
-    int r = 0, c = cols - 1;
-    while (r < rows && c >= 0)
+    int rows = matrix.size() - 1, cols = matrix[0].size() - 1;
+    int lo = 0, ho = rows;
+    while (lo <= ho)
     {
-        if (matrix[r][c] == target)
-            return true;
-        if (matrix[r][matrix[0].size() - 1] > target && matrix[r][0] < target)
+        int mid = lo + (ho - lo) / 2;
+
+        if (matrix[mid][0] == target)
         {
-            return binary_search(matrix[r].begin(), matrix[r].end(), target);
+            return true;
         }
-        if (matrix[r][c] > target)
-            c--;
+        if (matrix[mid][cols] >= target && matrix[mid][0] <= target || rows <= 1)
+        {
+            return binary_search(matrix[mid].begin(), matrix[mid].end(), target);
+        }
+        if (matrix[mid][0] > target)
+        {
+            ho = mid - 1;
+        }
         else
-            r++;
+        {
+            lo = mid + 1;
+        }
     }
+
     return false;
 }
-
 int main()
 {
     vector<vector<int>> vect{{1, 2, 3},
