@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <random>
+#include <chrono>
+
 using namespace std;
 
 bool searchMatrix(vector<vector<int>> &matrix, int target)
@@ -36,10 +39,34 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
 
     return false;
 }
+
+
+vector<vector<int>> gen_sorted_matrix(int n, int m, int min, int seed){
+    vector<vector<int>> matrix(n, vector<int>(m, 0));
+    random_device rd;
+    mt19937 gen(rd());
+    
+    int max = min;
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            uniform_int_distribution<> distr(max, max + seed);            
+            max = distr(gen);
+            matrix[i][j] = max;
+        }
+    }
+    return matrix;
+}
+
 int main()
 {
-    vector<vector<int>> vect{{1, 2, 3},
-                             {4, 5, 6},
-                             {7, 8, 9}};
+    // use this to paste a vector 
+    vector<vector<int>> vect = gen_sorted_matrix(5, 4, 1, 3);
+    for (auto it : vect){
+        for (auto it2 : it){
+            cout << it2 << ", ";
+        }
+        cout << endl;
+    }
+
     cout << ((searchMatrix(vect, 4) == 0) ? "False" : "True") << endl;
 }
